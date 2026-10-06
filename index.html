@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Magic Gravity - Reino Medieval</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=MedievalSharp&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cinzel', serif;
+            color: #f7d77a;
+            background:
+                linear-gradient(rgba(32, 13, 5, 0.65), rgba(20, 5, 2, 0.85)),
+                url("https://images.unsplash.com/photo-1524666041070-9f3a4f2c7b4c?auto=format&fit=crop&w=2000&q=80");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+
+        /* CAMADA ESCURA */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background:
+                radial-gradient(circle at center, transparent 20%, rgba(0,0,0,.55) 100%);
+            z-index: -1;
+        }
+
+        /* CABEÇALHO */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 7%;
+            background: linear-gradient(
+                90deg,
+                #2b0804,
+                #5e1209,
+                #2b0804
+            );
+            border-bottom: 3px solid #d5a936;
+            box-shadow: 0 5px 25px #000;
+        }
+
+        .logo {
+            font-family: 'MedievalSharp', cursive;
+            font-size: 30px;
+            color: #ffd75a;
+            text-shadow:
+                0 0 5px #d18b00,
+                0 0 15px #9c5300;
+        }
+
+        nav {
+            display: flex;
+            gap: 28px;
+        }
+
+        nav a {
+            color: #f6d477;
+            text-decoration: none;
+            font-weight: bold;
+            transition: .3s;
+            position: relative;
+        }
+
+        nav a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -7px;
+            width: 0;
+            height: 2px;
+            background: #ffd34e;
+            transition: .3s;
+        }
+
+        nav a:hover {
+            color: white;
+            text-shadow: 0 0 10px #ffb300;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        /* HERO */
+        .hero {
+            min-height: 88vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .hero-content {
+            max-width: 900px;
+        }
+
+        .symbol {
+            font-size: 75px;
+            animation: float 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 15px #e5a900);
+        }
+
+        .hero h1 {
+            font-family: 'MedievalSharp', cursive;
+            font-size: clamp(55px, 10vw, 120px);
+            color: #ffd85a;
+            text-shadow:
+                4px 4px 0 #3b0b03,
+                0 0 20px #c47b00,
+                0 0 50px #7b3000;
+            margin: 10px 0;
+        }
+
+        .hero h2 {
+            color: #fff0b0;
+            font-size: 25px;
+            letter-spacing: 5px;
+        }
+
+        .hero p {
+            margin: 25px auto;
+            max-width: 700px;
+            color: #ead8aa;
+            font-size: 17px;
+            line-height: 1.8;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 35px;
+            margin-top: 15px;
+            color: #321006;
+            background: linear-gradient(
+                135deg,
+                #fff0a1,
+                #d7a72f,
+                #8d5c0d
+            );
+            border: 2px solid #ffe18a;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 900;
+            box-shadow:
+                0 0 10px #d99c1a,
+                inset 0 0 10px rgba(255,255,255,.4);
+            transition: .3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-4px) scale(1.03);
+            box-shadow:
+                0 0 20px #ffcb32,
+                0 0 50px rgba(255,157,0,.5);
+        }
+
+        /* SEÇÕES */
+        section {
+            padding: 90px 8%;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title h2 {
+            font-family: 'MedievalSharp', cursive;
+            font-size: 45px;
+            color: #ffd65b;
+            text-shadow: 3px 3px #350b04;
+        }
+
+        .section-title p {
+            color: #d8c18c;
+            margin-top: 10px;
+        }
+
+        /* PERGAMINHO */
+        .scroll {
+            max-width: 1000px;
+            margin: auto;
+            padding: 55px;
+            color: #3c1b0b;
+            background:
+                linear-gradient(
+                    rgba(248,224,163,.93),
+                    rgba(196,155,82,.93)
+                );
+            border: 8px solid #704018;
+            box-shadow:
+                0 0 0 4px #d5a936,
+                0 20px 40px rgba(0,0,0,.7);
+            position: relative;
+        }
+
+        .scroll::before,
+        .scroll::after {
+            content: "✦";
+            position: absolute;
+            color: #7b160d;
+            font-size: 35px;
+        }
+
+        .scroll::before {
+            top: 15px;
+            left: 20px;
+        }
+
+        .scroll::after {
+            bottom: 15px;
+            right: 20px;
+        }
+
+        .scroll h3 {
+            text-align: center;
+            font-family: 'MedievalSharp', cursive;
+            color: #75160c;
+            font-size: 35px;
+            margin-bottom: 20px;
+        }
+
+        .scroll p {
+            line-height: 1.9;
+            font-size: 17px;
+        }
+
+        /* CARTAS / PERSONAGENS */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .card {
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(82,15,7,.96),
+                    rgba(35,7,3,.96)
+                );
+            border: 2px solid #bd8b25;
+            padding: 30px 20px;
+            text-align: center;
+            border-radius: 8px;
+            box-shadow:
+                0 10px 30px #000,
+                inset 0 0 25px rgba(255,179,0,.08);
+            transition: .4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: #e3a20b;
+            filter: blur(80px);
+            opacity: .12;
+            top: -70px;
+            left: -70px;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: #ffe274;
+            box-shadow:
+                0 15px 40px #000,
+                0 0 25px rgba(255,184,35,.35);
+        }
+
+        .card-icon {
+            font-size: 65px;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            color: #ffd75a;
+            font-size: 23px;
+            margin-bottom: 12px;
+        }
+
+        .card p {
+            color: #d8c9a5;
+            line-height: 1.6;
+        }
+
+        /* MISSÕES */
+        .quests {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .quest {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            padding: 25px;
+            margin-bottom: 20px;
+            background: rgba(45,8,4,.9);
+            border-left: 5px solid #d5a936;
+            border-right: 1px solid #6d210e;
+            box-shadow: 0 8px 20px #000;
+            transition: .3s;
+        }
+
+        .quest:hover {
+            transform: translateX(10px);
+            background: rgba(75,12,6,.95);
+        }
+
+        .quest-icon {
+            font-size: 40px;
+        }
+
+        .quest h3 {
+            color: #f4cc55;
+            margin-bottom: 5px;
+        }
+
+        .quest p {
+            color: #cdbd98;
+        }
+
+        /* MAGIA */
+        .magic {
+            text-align: center;
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(145,23,10,.35),
+                    transparent 60%
+                );
+        }
+
+        .magic-orb {
+            width: 180px;
+            height: 180px;
+            margin: 20px auto 40px;
+            border-radius: 50%;
+            background:
+                radial-gradient(
+                    circle at 35% 30%,
+                    #fff6a0,
+                    #ffbc19 15%,
+                    #a3220c 45%,
+                    #380703 70%
+                );
+            box-shadow:
+                0 0 20px #ffc400,
+                0 0 60px #c32a09,
+                0 0 120px rgba(255,128,0,.4);
+            animation: magic 2.5s ease-in-out infinite;
+        }
+
+        /* RODAPÉ */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            background: #210603;
+            border-top: 3px solid #c69a2b;
+            color: #a9956c;
+        }
+
+        footer strong {
+            color: #e5bb49;
+        }
+
+        /* ANIMAÇÕES */
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        @keyframes magic {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow:
+                    0 0 20px #ffc400,
+                    0 0 60px #c32a09;
+            }
+
+            50% {
+                transform: scale(1.08);
+                box-shadow:
+                    0 0 40px #fff000,
+                    0 0 100px #e3340b;
+            }
+        }
+
+        /* RESPONSIVO */
+        @media (max-width: 700px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            nav {
+                gap: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero h1 {
+                font-size: 65px;
+            }
+
+            .hero h2 {
+                font-size: 17px;
+            }
+
+            .scroll {
+                padding: 30px 20px;
+            }
+
+            .quest {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- MENU -->
+    <header>
+        <div class="logo">⚔ MAGIC GRAVITY</div>
+
+        <nav>
+            <a href="#inicio">Início</a>
+            <a href="#lore">Lore</a>
+            <a href="#classes">Classes</a>
+            <a href="#missoes">Missões</a>
+            <a href="#magia">Magia</a>
+        </nav>
+    </header>
+
+    <!-- INÍCIO -->
+    <section class="hero" id="inicio">
+        <div class="hero-content">
+
+            <div class="symbol">⚜</div>
+
+            <h1>Magic Gravity</h1>
+
+            <h2>O REINO ONDE A MAGIA DESAFIA A GRAVIDADE</h2>
+
+            <p>
+                Entre em um mundo de cavaleiros, magos, dragões e antigos
+                mistérios. Escolha seu destino, empunhe sua espada e escreva
+                sua própria lenda.
+            </p>
+
+            <a href="#lore" class="btn">
+                ⚔ ENTRAR NO REINO
+            </a>
+
+        </div>
+    </section>
+
+    <!-- LORE -->
+    <section id="lore">
+
+        <div class="section-title">
+            <h2>📜 As Crônicas do Reino</h2>
+            <p>Uma história escrita com sangue, magia e ouro.</p>
+        </div>
+
+        <div class="scroll">
+
+            <h3>A Lenda de Magic Gravity</h3>
+
+            <p>
+                Há mil anos, uma força misteriosa caiu dos céus e alterou
+                as leis da natureza. Essa força ficou conhecida como
+                <strong>Gravity Arcana</strong>.
+            </p>
+
+            <br>
+
+            <p>
+                Desde então, os maiores guerreiros e feiticeiros do mundo
+                procuram controlar esse poder. Reinos foram erguidos,
+                impérios caíram e monstros antigos despertaram.
+            </p>
+
+            <br>
+
+            <p>
+                Agora, uma nova ameaça surgiu nas terras esquecidas.
+                Uma antiga profecia anuncia o retorno do
+                <strong>Rei das Sombras</strong>.
+            </p>
+
+            <br>
+
+            <p>
+                E somente aqueles escolhidos pela magia poderão impedir
+                o fim do reino.
+            </p>
+
+        </div>
+
+    </section>
+
+    <!-- CLASSES -->
+    <section id="classes">
+
+        <div class="section-title">
+            <h2>🛡 Escolha sua Classe</h2>
+            <p>Seu destino começa com sua escolha.</p>
+        </div>
+
+        <div class="cards">
+
+            <div class="card">
+                <div class="card-icon">⚔️</div>
+                <h3>Cavaleiro</h3>
+                <p>
+                    Mestres da espada e defensores dos reinos.
+                    Resistentes e poderosos no combate corpo a corpo.
+                </p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">🧙</div>
+                <h3>Arquimago</h3>
+                <p>
+                    Manipuladores das forças arcanas capazes de
+                    lançar feitiços devastadores.
+                </p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">🏹</div>
+                <h3>Ranger</h3>
+                <p>
+                    Caçadores silenciosos que dominam as florestas
+                    e nunca erram seus alvos.
+                </p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">🐉</div>
+                <h3>Draconiano</h3>
+                <p>
+                    Guerreiros descendentes dos antigos dragões,
+                    portadores de um poder ancestral.
+                </p>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- MISSÕES -->
+    <section id="missoes">
+
+        <div class="section-title">
+            <h2>📜 Quadro de Missões</h2>
+            <p>Grandes recompensas aguardam os aventureiros.</p>
+        </div>
+
+        <div class="quests">
+
+            <div class="quest">
+                <div class="quest-icon">🐉</div>
+
+                <div>
+                    <h3>O Dragão da Montanha</h3>
+                    <p>
+                        Derrote o dragão que aterroriza as aldeias do norte.
+                        Recompensa: 5.000 moedas de ouro.
+                    </p>
+                </div>
+            </div>
+
+            <div class="quest">
+                <div class="quest-icon">🏰</div>
+
+                <div>
+                    <h3>O Castelo Abandonado</h3>
+                    <p>
+                        Explore as ruínas e descubra o segredo escondido
+                        dentro do antigo castelo.
+                    </p>
+                </div>
+            </div>
+
+            <div class="quest">
+                <div class="quest-icon">💀</div>
+
+                <div>
+                    <h3>A Legião dos Mortos</h3>
+                    <p>
+                        Uma legião de mortos-vivos despertou.
+                        Encontre sua origem antes que seja tarde demais.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- MAGIA -->
+    <section class="magic" id="magia">
+
+        <div class="section-title">
+            <h2>✨ Gravity Arcana</h2>
+            <p>O poder que desafia as próprias leis do mundo.</p>
+        </div>
+
+        <div class="magic-orb"></div>
+
+        <p>
+            "Quando a magia tocar o céu, a gravidade cairá aos pés
+            daquele que possuir a coroa."
+        </p>
+
+        <br>
+
+        <a href="#inicio" class="btn">
+            ✦ DESPERTAR A MAGIA
+        </a>
+
+    </section>
+
+    <!-- RODAPÉ -->
+    <footer>
+
+        <p>
+            ⚜ <strong>MAGIC GRAVITY</strong> ⚜
+        </p>
+
+        <br>
+
+        <p>
+            Um reino criado para aqueles que nasceram para serem lendas.
+        </p>
+
+        <br>
+
+        <p>
+            © 2026 Magic Gravity — Todos os direitos reservados.
+        </p>
+
+    </footer>
+
+    <script>
+
+        // Pequeno efeito mágico seguindo o mouse
+        document.addEventListener("mousemove", function(event) {
+
+            const orb = document.querySelector(".magic-orb");
+
+            if (!orb) return;
+
+            const x = (event.clientX / window.innerWidth - 0.5) * 10;
+            const y = (event.clientY / window.innerHeight - 0.5) * 10;
+
+            orb.style.transform =
+                `translate(${x}px, ${y}px)`;
+
+        });
+
+        // Animação de entrada dos cards
+        const cards = document.querySelectorAll(".card");
+
+        const observer = new IntersectionObserver((entries) => {
+
+            entries.forEach(entry => {
+
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = "1";
+                    entry.target.style.transform = "translateY(0)";
+                }
+
+            });
+
+        }, {
+            threshold: 0.2
+        });
+
+        cards.forEach(card => {
+
+            card.style.opacity = "0";
+            card.style.transform = "translateY(40px)";
+            card.style.transition = "all .7s ease";
+
+            observer.observe(card);
+
+        });
+
+    </script>
+
+</body>
+</html>
